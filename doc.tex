@@ -1,0 +1,116 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage[colorlinks=true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{csquotes}
+
+\definecolor{LG}{HTML}{F9F9F9}
+
+%% Informations
+\title{\textsf{luapackageloader} package}
+\author{Deepak Jois \\ \href{deepak.jois@gmail.com}{deepak.jois@gmail.com}}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+LuaTeX modifies the package loading behavior for Lua package, as mentioned in
+Section 3.2 of the LuaTeX manual:
+
+\begin{displayquote}
+LuaTEX is able to use the kpathsea library to find require()d modules. For this
+purpose, \texttt{package.searchers[2]} is replaced by a different loader function,
+that decides at runtime whether to use kpathsea or the built-in core Lua
+function. It uses kpathsea when that is already initialized at that point in
+  time, otherwise it reverts to using the normal \texttt{package.path} loader.
+\end{displayquote}
+
+What this means is that once kpathsea is initialized, the normal package
+loading behavior is no longer available.
+
+This package allows Lua package loading behavior inside LuaTeX to use \textit{both}
+kpathsea and the default loading mechanism. If the module is not available in kpathsea,
+LuaTeX will try to load it from \texttt{package.path}. This functionality is very useful,
+for instance when you need to use \href{https://luarocks.org/}{LuaRocks} inside LuaTeX.
+
+\section{Installation}
+
+Install this package like any other \TeX~or \LaTeX~package.
+
+\section{Dependencies}
+
+This package depends on \href{https://www.ctan.org/pkg/ifluatex}{ifluatex} CTAN package.
+
+\section{Usage}
+
+\subsection{Plain \TeX}
+In Plain \TeX, you can import the module as follows:
+
+\begin{minted}[bgcolor=LG, fontsize=\footnotesize]{tex}
+\input luapackageloader.sty
+\end{minted}
+
+\subsection{\LaTeX}
+
+In \LaTeX, add the \texttt{luapackageloader} packages to your document:
+
+\begin{minted}[bgcolor=LG, fontsize=\footnotesize]{tex}
+\usepackage{luapackageloader}
+\end{minted}
+
+\subsection{Loading Packages}
+
+Once you have imported \texttt{luapackageloader}, it adds a table called
+\texttt{luapackageloader} under the global namepace, and automatically
+overrides the default LuaTeX package searchers. It should be possible to load a
+Lua package (including \href{https://luarocks.org/}{LuaRocks} modules, as long
+as \texttt{package.path} and \texttt{package.cpath} is setup properly in your
+environment) as follows:
+
+\begin{minted}[bgcolor=LG, fontsize=\footnotesize]{tex}
+\directlua{
+  local serpent = require("serpent") % luarocks install serpent
+}
+\end{minted}
+
+\subsection{Reverting to default loading behavior}
+
+The package loading can be reverted back to the default LuaTeX behavior using the \texttt{restore\_kpse\_searchers()}
+\begin{minted}[bgcolor=LG, fontsize=\footnotesize]{tex}
+\directlua{
+  luapackageloader.resetore_kpse_searchers()
+}
+\end{minted}
+
+\subsection{Manually setting up to load Lua packages}
+
+This package exposes the function \texttt{add\_lua\_searchers()}, to manually setup the package searchers again, if it was reverted for some reason, after loading the package.
+
+\begin{minted}[bgcolor=LG, fontsize=\footnotesize]{tex}
+\input luapackageloader.sty
+\directlua{
+  % Let’s revert the package searchers to their default loading behavior.
+  luapackageloader.restore_kpse_searchers()
+
+ % Some code here...
+
+  % Now let’s setup the package searchers to use Lua searchers again.
+  luapackageloader.add_lua_searchers()
+}
+\end{minted}
+
+\end{document}
