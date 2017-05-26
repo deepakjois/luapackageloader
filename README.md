@@ -1,9 +1,9 @@
 # luapackageloader
-CTAN module to allow LuaTeX to load packages from the default `package.path` and `package.cpath` locations. This could be useful
+CTAN package to allow LuaTeX to load packages from the default `package.path` and `package.cpath` locations. This could be useful
 to load external Lua modules, including modules installed via [LuaRocks](https://luarocks.org).
 
 ## Usage
-See the [PDF documentation](doc.pdf) for details.
+See the [PDF documentation](luapackageloader.pdf) for details.
 
 Here is a quick TeX example:
 

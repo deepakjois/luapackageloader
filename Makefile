@@ -1,7 +1,7 @@
-doc.pdf: doc.tex
+luapackageloader.pdf: luapackageloader.tex
 	xelatex --shell-escape doc.tex
 
-luapackageloader.zip: doc.pdf luapackageloader.lua luapackageloader.sty README.md doc.tex
+luapackageloader.zip: luapackageloader.pdf luapackageloader.lua luapackageloader.sty README.md luapackageloader.tex
 	rm -rf luapackageloader/*
 	mkdir -p luapackageloader
 	cp $^ luapackageloader
