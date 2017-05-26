@@ -5,6 +5,6 @@ luapackageloader.zip: doc.pdf luapackageloader.lua luapackageloader.sty README.m
 	rm -rf luapackageloader/*
 	mkdir -p luapackageloader
 	cp $^ luapackageloader
-	zip -r $@ -r luapackageloader
+	zip -r $@ luapackageloader
 
 .PHONY: ctan
