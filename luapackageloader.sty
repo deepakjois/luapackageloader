@@ -1,0 +1,31 @@
+\def\luapackageloaderpkgdate{2017/05/26}
+\def\luapackageloaderversion{0.1}
+
+\expandafter\ifx\csname ProvidesPackage\endcsname\relax
+  \input ifluatex.sty\relax
+\else
+  \NeedsTeXFormat{LaTeX2e}
+  \ProvidesPackage{}[\luapackageloaderpkgdate\space v\luapackageloaderversion\space Lua package searchers for LuaTeX]
+  \RequirePackage{ifluatex}
+\fi
+
+\def\luapackageloader@dothings{%
+  \directlua{
+    luapackageloader = require("luapackageloader")
+    luapackageloader.add_lua_searchers()
+  }%
+}
+
+\expandafter\ifx\csname ProvidesPackage\endcsname\relax
+  \ifluatex
+   \luapackageloader@dothings
+  \else
+    \message{Warning: luapackageloader only works with LuaTeX (plain and LaTeX format)}
+  \fi
+\else
+  \ifluatex
+    \luapackageloader@dothings
+  \else
+    \PackageWarning{luapackageloader}{You are using this package without LuaTeX. This is not supported.}
+  \fi
+\fi

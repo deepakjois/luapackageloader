@@ -1,0 +1,29 @@
+\input luapackageloader.sty
+\directlua{
+	texio.write_nl("Loading package 'serpent'…")
+	if pcall(function() require("serpent") end) then
+		texio.write_nl("module 'serpent' loaded successfully!")
+	else
+	  texio.write_nl("module 'serpent' could not be loaded. Are you sure you have it installed? Try again after doing 'luarocks install serpent'.")
+	end
+
+	if not pcall(function() require("doesntexist") end) then
+	  texio.write_nl("module 'doesntexist' could not be loaded, which is expected.")
+	else
+	  texio.write_nl("This module should not exist.")
+	end
+
+	texio.write_nl("Unloading package serpent…")
+	package.loaded["serpent"] = nil
+	_G["serpent"] = nil
+
+	texio.write_nl("Restoring kpse searchers…")
+	luapackageloader.restore_kpse_searchers()
+
+	if pcall(function() require("serpent") end) then
+		texio.write_nl("module 'serpent' loaded successfully. This is unexpected!")
+	else
+	  texio.write_nl("module 'serpent' could not be loaded. kpse searchers restored successfully!")
+	end
+}
+\end
