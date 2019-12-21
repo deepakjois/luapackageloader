@@ -1,7 +1,7 @@
 -- Author: Deepak Jois
 -- License: LPPL Version 1.3c or higher <http://www.latex-project.org/lppl.txt>
--- Date: 2017/05/26
--- Version: 0.1
+-- Date: 2019/12/21
+-- Version: 0.2
 local luapackageloader = {}
 
 -- Cache the current kpse based searchers
